@@ -1,0 +1,10 @@
+river.pl 
+November
+http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/index.html
+http://perlmaven.com/how-to-read-a-csv-file-using-perl
+http://www.cpan.org/modules/INSTALL.html
+http://www.perlhowto.com/executing_external_commands
+http://perl101.org/subroutines.html
+http://perldoc.perl.org/perlretut.html
+http://stackoverflow.com/questions/334686/how-can-i-detect-the-operating-system-in-perl
+http://alvinalexander.com/perl/perl-command-line-arguments-read-args
