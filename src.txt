@@ -8,3 +8,4 @@ http://perl101.org/subroutines.html
 http://perldoc.perl.org/perlretut.html
 http://stackoverflow.com/questions/334686/how-can-i-detect-the-operating-system-in-perl
 http://alvinalexander.com/perl/perl-command-line-arguments-read-args
+http://pl.bab.la/slownik/polski-angielski/kolonia
