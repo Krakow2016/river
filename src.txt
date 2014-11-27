@@ -9,3 +9,13 @@ http://perldoc.perl.org/perlretut.html
 http://stackoverflow.com/questions/334686/how-can-i-detect-the-operating-system-in-perl
 http://alvinalexander.com/perl/perl-command-line-arguments-read-args
 http://pl.bab.la/slownik/polski-angielski/kolonia
+http://search.cpan.org/~makamaka/JSON-2.90/lib/JSON.pm
+http://perldoc.perl.org/strict.html
+https://metacpan.org/pod/Search::Elasticsearch
+http://search.cpan.org/dist/libwww-perl/lib/LWP.pm
+http://search.cpan.org/~mschilli/libwww-perl-6.08/lib/LWP/UserAgent.pm
+http://www.tizag.com/perlT/perlarrays.php
+http://perldoc.perl.org/functions/split.html
+http://perldoc.perl.org/functions/substr.html
+http://stackoverflow.com/questions/10302468/perl-substr-based-on-bytes
+http://stackoverflow.com/questions/10708297/perl-convert-a-string-to-utf-8-for-json-decode
