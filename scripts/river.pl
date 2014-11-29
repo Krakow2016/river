@@ -108,28 +108,28 @@ sub IndexJSON
 # not the best, but working
 sub FormatLanguageLevel
 {
-	my $field = shift;
-	my $level = substr(encode_utf8($field), 0 , 5);
-	if ($level =~ /Pocz/)
-	{
-		return 2;
-	}
-	elsif ($level =~ /Pods/)
-	{
-		return 4;
-	}
-	elsif ($level =~ /red/)
-	{
-		return 6;
-	}
-	elsif ($level =~ /Zaaw/)
-	{
-		return 8;
-	}
-	elsif ($level =~ /Bieg/)
-	{
-		return 10;
-	}
+    my $field = shift;
+    my $level = substr(encode_utf8($field), 0 , 5);
+    if ($level =~ /Pocz/)
+    {
+        return 2;
+    }
+    elsif ($level =~ /Pods/)
+    {
+        return 4;
+    }
+    elsif ($level =~ /red/)
+    {
+        return 6;
+    }
+    elsif ($level =~ /Zaaw/)
+    {
+        return 8;
+    }
+    elsif ($level =~ /Bieg/)
+    {
+        return 10;
+    }
 }
 
 #
@@ -137,19 +137,19 @@ sub FormatLanguageLevel
 #
 sub CreateDepartmentsArray
 {
-	my $field = shift;
-	$field = RemoveSpecialCharacters($field);
-	my @departments = split(/,/,$field);
-	
-	my $i = 0;
-	my $size = @departments;
-	for ($i = 0; $i < $size; $i++)
-	{
-		@departments[$i] = $es_inner_quote.@departments[$i].$es_inner_quote;
-	}
-	
-	return @departments;
-	
+    my $field = shift;
+    $field = RemoveSpecialCharacters($field);
+    my @departments = split(/,/,$field);
+    
+    my $i = 0;
+    my $size = @departments;
+    for ($i = 0; $i < $size; $i++)
+    {
+        @departments[$i] = $es_inner_quote.@departments[$i].$es_inner_quote;
+    }
+    
+    return @departments;
+    
 }
 
 #
@@ -157,19 +157,19 @@ sub CreateDepartmentsArray
 #
 sub CreatePreviousWyd
 {
-	my $fields = shift;
-	my $previous_wyd;
-	my @cities = ("paris", "rome", "toronto", "cologne", "sydney", "madrit", "rio");
-	my $size_cities = @cities;
-	my $index = 0;
-	for ($index = 0; $index < $size_cities; $index++)
-	{
-		if ( length($fields->[25+$index]) ) 
-		{
-			$previous_wyd->{@cities[$index]} = $es_inner_quote.RemoveSpecialCharacters($fields->[25+$index]).$es_inner_quote;
-		}
-	}
-	return $previous_wyd;	
+    my $fields = shift;
+    my $previous_wyd;
+    my @cities = ("paris", "rome", "toronto", "cologne", "sydney", "madrit", "rio");
+    my $size_cities = @cities;
+    my $index = 0;
+    for ($index = 0; $index < $size_cities; $index++)
+    {
+        if ( length($fields->[25+$index]) ) 
+        {
+            $previous_wyd->{@cities[$index]} = $es_inner_quote.RemoveSpecialCharacters($fields->[25+$index]).$es_inner_quote;
+        }
+    }
+    return $previous_wyd;    
 }
 
 #
@@ -177,16 +177,16 @@ sub CreatePreviousWyd
 #
 sub FormatConsent
 {
-	my $field = shift;
-	my $consent = substr($field,0,3);
-	if ($consent=~/Tak/)
-	{
-		return JSON::true;
-	}
-	else
-	{
-		return JSON::false;
-	}
+    my $field = shift;
+    my $consent = substr($field,0,3);
+    if ($consent=~/Tak/)
+    {
+        return JSON::true;
+    }
+    else
+    {
+        return JSON::false;
+    }
 }
 
 #
@@ -195,20 +195,20 @@ sub FormatConsent
 sub CreateJSONFromPaper
 {
     my $fields = shift;
-	my $perl_scalar =
-	{
-		first_name => $es_inner_quote.RemoveSpecialCharacters($fields->[1]).$es_inner_quote,
-		last_name => $es_inner_quote.RemoveSpecialCharacters($fields->[2]).$es_inner_quote,
-		email => $es_inner_quote.RemoveSpecialCharacters($fields->[4]).$es_inner_quote,
-		mobile => $es_inner_quote.RemoveSpecialCharacters($fields->[3]).$es_inner_quote,
-		address2 => $es_inner_quote.RemoveSpecialCharacters($fields->[5]).$es_inner_quote,
-		experience => $es_inner_quote.RemoveSpecialCharacters($fields->[6]).$es_inner_quote,
-	    interests =>$es_inner_quote.RemoveSpecialCharacters($fields->[7]).$es_inner_quote,
-		experience => $es_inner_quote.RemoveSpecialCharacters($fields->[6]).$es_inner_quote,
-		extra => $es_inner_quote.RemoveSpecialCharacters($fields->[9]).$es_inner_quote
-	};
-	my $json = encode_json $perl_scalar;
-	return $json
+    my $perl_scalar =
+    {
+        first_name => $es_inner_quote.RemoveSpecialCharacters($fields->[1]).$es_inner_quote,
+        last_name => $es_inner_quote.RemoveSpecialCharacters($fields->[2]).$es_inner_quote,
+        email => $es_inner_quote.RemoveSpecialCharacters($fields->[4]).$es_inner_quote,
+        mobile => $es_inner_quote.RemoveSpecialCharacters($fields->[3]).$es_inner_quote,
+        address2 => $es_inner_quote.RemoveSpecialCharacters($fields->[5]).$es_inner_quote,
+        experience => $es_inner_quote.RemoveSpecialCharacters($fields->[6]).$es_inner_quote,
+        interests =>$es_inner_quote.RemoveSpecialCharacters($fields->[7]).$es_inner_quote,
+        experience => $es_inner_quote.RemoveSpecialCharacters($fields->[6]).$es_inner_quote,
+        extra => $es_inner_quote.RemoveSpecialCharacters($fields->[9]).$es_inner_quote
+    };
+    my $json = encode_json $perl_scalar;
+    return $json
 }
 
 #
@@ -218,55 +218,55 @@ sub CreateJSONFromInternet
 {
     my $fields = shift;
 
-	my @departments = CreateDepartmentsArray($fields->[22]);
-	my $perl_scalar =
-	{
-		created_at => DateTime->from_epoch(epoch => str2time($fields->[0]))->datetime,
-		first_name => $es_inner_quote.RemoveSpecialCharacters($fields->[1]).$es_inner_quote,
-		last_name => $es_inner_quote.RemoveSpecialCharacters($fields->[2]).$es_inner_quote,
-		email => $es_inner_quote.RemoveSpecialCharacters($fields->[3]).$es_inner_quote,
-		mobile => $es_inner_quote.RemoveSpecialCharacters($fields->[4]).$es_inner_quote,
-		address => $es_inner_quote.RemoveSpecialCharacters($fields->[5]).$es_inner_quote,
-		address2 => $es_inner_quote.RemoveSpecialCharacters($fields->[6]).$es_inner_quote,
-		parish => $es_inner_quote.RemoveSpecialCharacters($fields->[7]).$es_inner_quote,
-		birth_date => DateTime->from_epoch(epoch => str2time($fields->[8]))->ymd('-'),
-		education => $es_inner_quote.RemoveSpecialCharacters($fields->[9]).$es_inner_quote,
-		study_field => $es_inner_quote.RemoveSpecialCharacters($fields->[10]).$es_inner_quote,
+    my @departments = CreateDepartmentsArray($fields->[22]);
+    my $perl_scalar =
+    {
+        created_at => DateTime->from_epoch(epoch => str2time($fields->[0]))->datetime,
+        first_name => $es_inner_quote.RemoveSpecialCharacters($fields->[1]).$es_inner_quote,
+        last_name => $es_inner_quote.RemoveSpecialCharacters($fields->[2]).$es_inner_quote,
+        email => $es_inner_quote.RemoveSpecialCharacters($fields->[3]).$es_inner_quote,
+        mobile => $es_inner_quote.RemoveSpecialCharacters($fields->[4]).$es_inner_quote,
+        address => $es_inner_quote.RemoveSpecialCharacters($fields->[5]).$es_inner_quote,
+        address2 => $es_inner_quote.RemoveSpecialCharacters($fields->[6]).$es_inner_quote,
+        parish => $es_inner_quote.RemoveSpecialCharacters($fields->[7]).$es_inner_quote,
+        birth_date => DateTime->from_epoch(epoch => str2time($fields->[8]))->ymd('-'),
+        education => $es_inner_quote.RemoveSpecialCharacters($fields->[9]).$es_inner_quote,
+        study_field => $es_inner_quote.RemoveSpecialCharacters($fields->[10]).$es_inner_quote,
         studying_from => $es_inner_quote.RemoveSpecialCharacters($fields->[11]).$es_inner_quote,
-		experience => $es_inner_quote.RemoveSpecialCharacters($fields->[12]).$es_inner_quote,
-		languages => [
-			{ 
-				name => $es_inner_quote.RemoveSpecialCharacters($fields->[13]).$es_inner_quote,
-				level => FormatLanguageLevel($fields->[14])
-			},
-			{ 
-				name => $es_inner_quote.RemoveSpecialCharacters($fields->[15]).$es_inner_quote,
-				level => FormatLanguageLevel($fields->[16])
-			},
-			{ 
-				name => $es_inner_quote.RemoveSpecialCharacters($fields->[17]).$es_inner_quote,
-				level => FormatLanguageLevel($fields->[18])
-			},
-			{ 
-				name => $es_inner_quote.RemoveSpecialCharacters($fields->[19]).$es_inner_quote,
-				level => FormatLanguageLevel($fields->[20])
-			}],
-			  
-	    interests => $es_inner_quote.RemoveSpecialCharacters($fields->[21]).$es_inner_quote,
-		departments => \@departments,
-		availability => $es_inner_quote.RemoveSpecialCharacters($fields->[23]).$es_inner_quote,
-		consent => FormatConsent($fields->[32])
-	};
-	
-	my $previous_wyd = CreatePreviousWyd($fields);
-	my $size_previous_wyd = keys %$previous_wyd;
-	if ($size_previous_wyd)
-	{
-		$perl_scalar->{previous_wyd} = $previous_wyd;
-	}
-		
-	my $json = encode_json $perl_scalar;
-	return $json;
+        experience => $es_inner_quote.RemoveSpecialCharacters($fields->[12]).$es_inner_quote,
+        languages => [
+            { 
+                name => $es_inner_quote.RemoveSpecialCharacters($fields->[13]).$es_inner_quote,
+                level => FormatLanguageLevel($fields->[14])
+            },
+            { 
+                name => $es_inner_quote.RemoveSpecialCharacters($fields->[15]).$es_inner_quote,
+                level => FormatLanguageLevel($fields->[16])
+            },
+            { 
+                name => $es_inner_quote.RemoveSpecialCharacters($fields->[17]).$es_inner_quote,
+                level => FormatLanguageLevel($fields->[18])
+            },
+            { 
+                name => $es_inner_quote.RemoveSpecialCharacters($fields->[19]).$es_inner_quote,
+                level => FormatLanguageLevel($fields->[20])
+            }],
+              
+        interests => $es_inner_quote.RemoveSpecialCharacters($fields->[21]).$es_inner_quote,
+        departments => \@departments,
+        availability => $es_inner_quote.RemoveSpecialCharacters($fields->[23]).$es_inner_quote,
+        consent => FormatConsent($fields->[32])
+    };
+    
+    my $previous_wyd = CreatePreviousWyd($fields);
+    my $size_previous_wyd = keys %$previous_wyd;
+    if ($size_previous_wyd)
+    {
+        $perl_scalar->{previous_wyd} = $previous_wyd;
+    }
+        
+    my $json = encode_json $perl_scalar;
+    return $json;
 }
 
 
@@ -279,10 +279,10 @@ $csv->getline( $csv_file_handle );
 $_id = 0;
 while (my $fields = $csv->getline( $csv_file_handle )) 
 {
-	my $json;
+    my $json;
     $_id++;
-	$json = CreateJSONFromPaper($fields);
-	IndexJSON($_id, $json);
+    $json = CreateJSONFromPaper($fields);
+    IndexJSON($_id, $json);
 }
 if (not $csv->eof) 
 {
@@ -296,10 +296,10 @@ open ($csv_file_handle, '<:encoding(utf8)', $INTERNET_SRC) or die "Could not ope
 $csv->getline( $csv_file_handle );
 while (my $fields = $csv->getline( $csv_file_handle )) 
 {
-	my $json;
+    my $json;
     $_id++;
-	$json = CreateJSONFromInternet($fields);
-	IndexJSON($_id, $json);
+    $json = CreateJSONFromInternet($fields);
+    IndexJSON($_id, $json);
 }
 if (not $csv->eof) 
 {
