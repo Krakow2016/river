@@ -1,4 +1,4 @@
-#The MIT License (MIT)
+﻿#The MIT License (MIT)
 #Copyright (c) 2014 Krakow2016
 #Permission is hereby granted, free of charge, to any person obtaining a copy
 #of this software and associated documentation files (the "Software"), to deal
@@ -57,7 +57,7 @@ my $csv_file_handle;
 
 # Quotes -- windows or linux
 my $osname = $^O;
-my $es_inner_quote_win = "\"";
+my $es_inner_quote_win = "";
 my $es_outer_quote_win = "\"";
 my $es_inner_quote_linux = "";
 my $es_outer_quote_linux = "\'";
@@ -105,18 +105,16 @@ sub IndexJSON
 
 #
 # FormatLanguageLevel ($field)
-# TODO not working
+# not the best, but working
 sub FormatLanguageLevel
 {
 	my $field = shift;
-	$level = encode_utf8($field);
-	#print $level, "\n";
-	return 2;
-	if ($level =~ /ocz/)
+	my $level = substr(encode_utf8($field), 0 , 5);
+	if ($level =~ /Pocz/)
 	{
 		return 2;
 	}
-	elsif ($level =~ /ods/)
+	elsif ($level =~ /Pods/)
 	{
 		return 4;
 	}
@@ -124,11 +122,11 @@ sub FormatLanguageLevel
 	{
 		return 6;
 	}
-	elsif ($level =~ /aaw/)
+	elsif ($level =~ /Zaaw/)
 	{
 		return 8;
 	}
-	elsif ($level =~ /ieg/)
+	elsif ($level =~ /Bieg/)
 	{
 		return 10;
 	}
