@@ -88,37 +88,16 @@ sub RemoveSpecialCharacters
 }
 
 #
-# ClearElasticSearch ();
-#
-sub ClearElasticSearch
-{
-    my $es_cmd = "curl -XDELETE ".$es_outer_quote."localhost:9200/$_index/$_type".$es_outer_quote;
-    print "$es_cmd \n";
-    system ($es_cmd);
-}
-
-#
-# DeleteJSON ($_id);
-#
-sub DeleteJSON
-{
-    my $_id = shift;
-    my $es_cmd = "curl -XDELETE ".$es_outer_quote."localhost:9200/$_index/$_type/$_id ".$es_outer_quote;
-    system($es_cmd);
-}
-
-#
 # IndexJSON ($_id, $json);
 # Indexes JSON in Elastic Search
 #
 sub IndexJSON
 {
-	my $_id = shift;
+    my $_id = shift;
     my $es_json = shift;
-    
-    my $es_cmd = "curl -XPUT ".$es_outer_quote."localhost:9200/$_index/$_type/$_id".$es_outer_quote." -d ".$es_json;
-    my $result = `$es_cmd`;
-    
+
+    print encode_json({ create => { _id => $_id }})."\n";
+    print $es_json."\n";
 }
 
 ##################Subroutines for fields######################
@@ -303,9 +282,6 @@ sub CreateJSONFromInternet
 
 ##########################SCRIPT##############################
 
-# Clear Elastic Search
-ClearElasticSearch();
-
 # Create JSONs from Paper Version
 
 open ($csv_file_handle, '<:encoding(utf8)', $PAPER_SRC) or die "Could not open '$PAPER_SRC' $!\n";
@@ -315,7 +291,6 @@ while (my $fields = $csv->getline( $csv_file_handle ))
 {
 	my $json;
     $_id++;
-	DeleteJSON($_id);
 	$json = CreateJSONFromPaper($fields);
 	IndexJSON($_id, $json);
 }
@@ -333,7 +308,6 @@ while (my $fields = $csv->getline( $csv_file_handle ))
 {
 	my $json;
     $_id++;
-	DeleteJSON($_id);
 	$json = CreateJSONFromInternet($fields);
 	IndexJSON($_id, $json);
 }
