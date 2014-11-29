@@ -41,6 +41,9 @@ use Text::CSV;
 use JSON;
 use utf8;
 use Encode qw(encode_utf8);
+use Date::Parse;
+use DateTime;
+use Time::Piece;
 
 my $PAPER_SRC = $ARGV[0];
 my $INTERNET_SRC =$ARGV[1];
@@ -98,38 +101,6 @@ sub IndexJSON
 
     print encode_json({ create => { _id => $_id }})."\n";
     print $es_json."\n";
-}
-
-##################Subroutines for fields######################
-#
-# FormatCreatedDate ($field)
-#
-sub FormatCreatedDate
-{
-	my $field = shift;
-	my $created_at;
-	my $year;
-	my $month;
-	my $day;
-	my $time;
-	if ($field =~ /(\d+)\/(\d+)\/(\d+) (\d\d:\d\d:\d\d)/) 
-	{
-		my $month = $1;
-		my $day = $2;
-		my $year = $3;
-		my $time = $4;
-		
-		if ($day < 10)
-		{
-			$day = "0$day";
-		}
-		if ($month < 10)
-		{
-			$month = "0$month";
-		}
-		$created_at = $es_inner_quote."$year-$month-$day $time".$es_inner_quote;
-	}	
-	return $created_at;
 }
 
 #
@@ -228,10 +199,11 @@ sub CreateJSONFromPaper
 sub CreateJSONFromInternet
 {
     my $fields = shift;
+
 	my @departments = CreateDepartmentsArray($fields->[22]);
 	my $perl_scalar =
 	{
-		created_at => FormatCreatedDate($fields->[0]),
+		created_at => DateTime->from_epoch(epoch => str2time($fields->[0]))->datetime,
 		first_name => $es_inner_quote.RemoveSpecialCharacters($fields->[1]).$es_inner_quote,
 		last_name => $es_inner_quote.RemoveSpecialCharacters($fields->[2]).$es_inner_quote,
 		email => $es_inner_quote.RemoveSpecialCharacters($fields->[3]).$es_inner_quote,
@@ -239,7 +211,7 @@ sub CreateJSONFromInternet
 		address => $es_inner_quote.RemoveSpecialCharacters($fields->[5]).$es_inner_quote,
 		address2 => $es_inner_quote.RemoveSpecialCharacters($fields->[6]).$es_inner_quote,
 		parish => $es_inner_quote.RemoveSpecialCharacters($fields->[7]).$es_inner_quote,
-		birth_date => $es_inner_quote.RemoveSpecialCharacters($fields->[8]).$es_inner_quote,
+		birth_date => DateTime->from_epoch(epoch => str2time($fields->[8]))->ymd('-'),
 		education => $es_inner_quote.RemoveSpecialCharacters($fields->[9]).$es_inner_quote,
 		study_field => $es_inner_quote.RemoveSpecialCharacters($fields->[10]).$es_inner_quote,
         studying_from => $es_inner_quote.RemoveSpecialCharacters($fields->[11]).$es_inner_quote,
