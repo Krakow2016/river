@@ -163,11 +163,11 @@ sub FormatConsent
 	my $consent = substr($field,0,3);
 	if ($consent=~/Tak/)
 	{
-		return "true";
+		return JSON::true;
 	}
 	else
 	{
-		return "false";
+		return JSON::false;
 	}
 }
 
