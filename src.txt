@@ -19,3 +19,5 @@ http://perldoc.perl.org/functions/split.html
 http://perldoc.perl.org/functions/substr.html
 http://stackoverflow.com/questions/10302468/perl-substr-based-on-bytes
 http://stackoverflow.com/questions/10708297/perl-convert-a-string-to-utf-8-for-json-decode
+http://www.cs.mcgill.ca/~abatko/computers/programming/perl/howto/hash/#initialize_a_hash
+http://perldoc.perl.org/functions/length.html

@@ -148,8 +148,28 @@ sub CreateDepartmentsArray
 		@departments[$i] = $es_inner_quote.@departments[$i].$es_inner_quote;
 	}
 	
-	return @departments
+	return @departments;
 	
+}
+
+#
+# CreatePreviousWyd ($fields)
+#
+sub CreatePreviousWyd
+{
+	my $fields = shift;
+	my $previous_wyd;
+	my @cities = ("paris", "rome", "toronto", "cologne", "sydney", "madrit", "rio");
+	my $size_cities = @cities;
+	my $index = 0;
+	for ($index = 0; $index < $size_cities; $index++)
+	{
+		if ( length($fields->[25+$index]) ) 
+		{
+			$previous_wyd->{@cities[$index]} = $es_inner_quote.RemoveSpecialCharacters($fields->[25+$index]).$es_inner_quote;
+		}
+	}
+	return $previous_wyd;	
 }
 
 #
@@ -235,16 +255,16 @@ sub CreateJSONFromInternet
 	    interests => $es_inner_quote.RemoveSpecialCharacters($fields->[21]).$es_inner_quote,
 		departments => \@departments,
 		availability => $es_inner_quote.RemoveSpecialCharacters($fields->[23]).$es_inner_quote,
-		previous_wyd => {
-			paris => $es_inner_quote.RemoveSpecialCharacters($fields->[25]).$es_inner_quote,
-			rome => $es_inner_quote.RemoveSpecialCharacters($fields->[26]).$es_inner_quote,
-			toronto => $es_inner_quote.RemoveSpecialCharacters($fields->[27]).$es_inner_quote,
-			cologne => $es_inner_quote.RemoveSpecialCharacters($fields->[28]).$es_inner_quote,
-			sydney => $es_inner_quote.RemoveSpecialCharacters($fields->[29]).$es_inner_quote,
-			madrit => $es_inner_quote.RemoveSpecialCharacters($fields->[30]).$es_inner_quote,
-			rio => $es_inner_quote.RemoveSpecialCharacters($fields->[31]).$es_inner_quote },
 		consent => FormatConsent($fields->[32])
 	};
+	
+	my $previous_wyd = CreatePreviousWyd($fields);
+	my $size_previous_wyd = keys %$previous_wyd;
+	if ($size_previous_wyd)
+	{
+		$perl_scalar->{previous_wyd} = $previous_wyd;
+	}
+		
 	my $json = encode_json $perl_scalar;
 	return $json;
 }
