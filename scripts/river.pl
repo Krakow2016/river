@@ -19,10 +19,10 @@
 
 ############################USAGE#################################
 #    
-# perl river.pl <paper_src> <internet_src>
+# perl river.pl <internet_src>
 # 
-# You should have CSV files for paper and internet version of Volunteers
-# example: perl river.pl paper.csv int.csv
+# You should have CSV files for internet version of Volunteers
+# example: perl river.pl int.csv
 #
 #
 ########################REVISION HISTORY##########################
@@ -45,8 +45,7 @@ use Date::Parse;
 use DateTime;
 use Time::Piece;
 
-my $PAPER_SRC = $ARGV[0];
-my $INTERNET_SRC =$ARGV[1];
+my $INTERNET_SRC =$ARGV[0];
 my $EMPTY_STRING = "";
 my $csv = Text::CSV->new ({
     binary => 1,
@@ -190,28 +189,6 @@ sub FormatConsent
 }
 
 #
-# CreateJSONFromPaper ($fields)
-#
-sub CreateJSONFromPaper
-{
-    my $fields = shift;
-    my $perl_scalar =
-    {
-        first_name => $es_inner_quote.RemoveSpecialCharacters($fields->[1]).$es_inner_quote,
-        last_name => $es_inner_quote.RemoveSpecialCharacters($fields->[2]).$es_inner_quote,
-        email => $es_inner_quote.RemoveSpecialCharacters($fields->[4]).$es_inner_quote,
-        mobile => $es_inner_quote.RemoveSpecialCharacters($fields->[3]).$es_inner_quote,
-        address2 => $es_inner_quote.RemoveSpecialCharacters($fields->[5]).$es_inner_quote,
-        experience => $es_inner_quote.RemoveSpecialCharacters($fields->[6]).$es_inner_quote,
-        interests =>$es_inner_quote.RemoveSpecialCharacters($fields->[7]).$es_inner_quote,
-        experience => $es_inner_quote.RemoveSpecialCharacters($fields->[6]).$es_inner_quote,
-        extra => $es_inner_quote.RemoveSpecialCharacters($fields->[9]).$es_inner_quote
-    };
-    my $json = encode_json $perl_scalar;
-    return $json
-}
-
-#
 # CreateJSONFromInternet ($fields)
 #
 sub CreateJSONFromInternet
@@ -271,24 +248,6 @@ sub CreateJSONFromInternet
 
 
 ##########################SCRIPT##############################
-
-# Create JSONs from Paper Version
-
-open ($csv_file_handle, '<:encoding(utf8)', $PAPER_SRC) or die "Could not open '$PAPER_SRC' $!\n";
-$csv->getline( $csv_file_handle );
-$_id = 0;
-while (my $fields = $csv->getline( $csv_file_handle )) 
-{
-    my $json;
-    $_id++;
-    $json = CreateJSONFromPaper($fields);
-    IndexJSON($_id, $json);
-}
-if (not $csv->eof) 
-{
-    $csv->error_diag();
-}
-close $csv_file_handle;
 
 # Create JSONs from Internet Version
 
