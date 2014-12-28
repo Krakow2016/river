@@ -98,7 +98,7 @@ sub IndexJSON
     my $_id = shift;
     my $es_json = shift;
 
-    print encode_json({ create => { _id => $_id }})."\n";
+    print encode_json({ index => { _id => $_id }})."\n";
     print $es_json."\n";
 }
 
