@@ -78,17 +78,6 @@ my $_index = "website";
 my $_type = "person";
 my $_id = 0;
 
-# 
-# RemoveSpecialCharacters ($string)
-#
-sub RemoveSpecialCharacters
-{
-    my $string = shift;
-    $string =~ s/\n/$EMPTY_STRING/g;
-    $string =~ s/\"/$EMPTY_STRING/g;
-    return $string;
-}
-
 #
 # IndexJSON ($_id, $json);
 # Indexes JSON in Elastic Search
@@ -137,7 +126,6 @@ sub FormatLanguageLevel
 sub CreateDepartmentsArray
 {
     my $field = shift;
-    $field = RemoveSpecialCharacters($field);
     my @departments = split(/,/,$field);
     
     my $i = 0;
@@ -165,7 +153,7 @@ sub CreatePreviousWyd
     {
         if ( length($fields->[25+$index]) ) 
         {
-            $previous_wyd->{@cities[$index]} = $es_inner_quote.RemoveSpecialCharacters($fields->[25+$index]).$es_inner_quote;
+            $previous_wyd->{@cities[$index]} = $es_inner_quote.$fields->[25+$index].$es_inner_quote;
         }
     }
     return $previous_wyd;    
@@ -199,39 +187,39 @@ sub CreateJSONFromInternet
     my $perl_scalar =
     {
         created_at => DateTime->from_epoch(epoch => str2time($fields->[0]))->datetime,
-        first_name => $es_inner_quote.RemoveSpecialCharacters($fields->[1]).$es_inner_quote,
-        last_name => $es_inner_quote.RemoveSpecialCharacters($fields->[2]).$es_inner_quote,
-        email => $es_inner_quote.RemoveSpecialCharacters($fields->[3]).$es_inner_quote,
-        mobile => $es_inner_quote.RemoveSpecialCharacters($fields->[4]).$es_inner_quote,
-        address => $es_inner_quote.RemoveSpecialCharacters($fields->[5]).$es_inner_quote,
-        address2 => $es_inner_quote.RemoveSpecialCharacters($fields->[6]).$es_inner_quote,
-        parish => $es_inner_quote.RemoveSpecialCharacters($fields->[7]).$es_inner_quote,
+        first_name => $es_inner_quote.$fields->[1].$es_inner_quote,
+        last_name => $es_inner_quote.$fields->[2].$es_inner_quote,
+        email => $es_inner_quote.$fields->[3].$es_inner_quote,
+        mobile => $es_inner_quote.$fields->[4].$es_inner_quote,
+        address => $es_inner_quote.$fields->[5].$es_inner_quote,
+        address2 => $es_inner_quote.$fields->[6].$es_inner_quote,
+        parish => $es_inner_quote.$fields->[7].$es_inner_quote,
         birth_date => DateTime->from_epoch(epoch => str2time($fields->[8]))->ymd('-'),
-        education => $es_inner_quote.RemoveSpecialCharacters($fields->[9]).$es_inner_quote,
-        study_field => $es_inner_quote.RemoveSpecialCharacters($fields->[10]).$es_inner_quote,
-        studying_from => $es_inner_quote.RemoveSpecialCharacters($fields->[11]).$es_inner_quote,
-        experience => $es_inner_quote.RemoveSpecialCharacters($fields->[12]).$es_inner_quote,
+        education => $es_inner_quote.$fields->[9].$es_inner_quote,
+        study_field => $es_inner_quote.$fields->[10].$es_inner_quote,
+        studying_from => $es_inner_quote.$fields->[11].$es_inner_quote,
+        experience => $es_inner_quote.$fields->[12].$es_inner_quote,
         languages => [
             { 
-                name => $es_inner_quote.RemoveSpecialCharacters($fields->[13]).$es_inner_quote,
+                name => $es_inner_quote.$fields->[13].$es_inner_quote,
                 level => FormatLanguageLevel($fields->[14])
             },
             { 
-                name => $es_inner_quote.RemoveSpecialCharacters($fields->[15]).$es_inner_quote,
+                name => $es_inner_quote.$fields->[15].$es_inner_quote,
                 level => FormatLanguageLevel($fields->[16])
             },
             { 
-                name => $es_inner_quote.RemoveSpecialCharacters($fields->[17]).$es_inner_quote,
+                name => $es_inner_quote.$fields->[17].$es_inner_quote,
                 level => FormatLanguageLevel($fields->[18])
             },
             { 
-                name => $es_inner_quote.RemoveSpecialCharacters($fields->[19]).$es_inner_quote,
+                name => $es_inner_quote.$fields->[19].$es_inner_quote,
                 level => FormatLanguageLevel($fields->[20])
             }],
               
-        interests => $es_inner_quote.RemoveSpecialCharacters($fields->[21]).$es_inner_quote,
+        interests => $es_inner_quote.$fields->[21].$es_inner_quote,
         departments => \@departments,
-        availability => $es_inner_quote.RemoveSpecialCharacters($fields->[23]).$es_inner_quote,
+        availability => $es_inner_quote.$fields->[23].$es_inner_quote,
         consent => FormatConsent($fields->[32])
     };
     
