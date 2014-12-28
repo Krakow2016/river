@@ -87,7 +87,7 @@ sub IndexJSON
     my $_id = shift;
     my $es_json = shift;
 
-    print encode_json({ index => { _id => $_id }})."\n";
+    print encode_json({ index => { _id => $INTERNET_SRC.":".$_id }})."\n";
     print $es_json."\n";
 }
 
@@ -196,27 +196,26 @@ sub CreateJSONFromInternet
         parish => $es_inner_quote.$fields->[7].$es_inner_quote,
         birth_date => DateTime->from_epoch(epoch => str2time($fields->[8]))->ymd('-'),
         education => $es_inner_quote.$fields->[9].$es_inner_quote,
-        study_field => $es_inner_quote.$fields->[10].$es_inner_quote,
-        studying_from => $es_inner_quote.$fields->[11].$es_inner_quote,
+        study_field => $es_inner_quote.$fields->[10]."; Rok studiów: ".$fields->[11].$es_inner_quote,
         experience => $es_inner_quote.$fields->[12].$es_inner_quote,
         languages => [
-            { 
+            {
                 name => $es_inner_quote.$fields->[13].$es_inner_quote,
                 level => FormatLanguageLevel($fields->[14])
             },
-            { 
+            {
                 name => $es_inner_quote.$fields->[15].$es_inner_quote,
                 level => FormatLanguageLevel($fields->[16])
             },
-            { 
+            {
                 name => $es_inner_quote.$fields->[17].$es_inner_quote,
                 level => FormatLanguageLevel($fields->[18])
             },
-            { 
+            {
                 name => $es_inner_quote.$fields->[19].$es_inner_quote,
                 level => FormatLanguageLevel($fields->[20])
-            }],
-              
+            }
+        ],
         interests => $es_inner_quote.$fields->[21].$es_inner_quote,
         departments => \@departments,
         availability => $es_inner_quote.$fields->[23].$es_inner_quote,
