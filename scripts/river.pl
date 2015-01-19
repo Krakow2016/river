@@ -212,10 +212,10 @@ sub CreateJSONFromInternet
         {
 			my $name;
 			my $text1 = $fields->[13+$index_languages];
-			my $text2 = "";
+			my $text2 = " ";
 			$text1 =~ /(.*)( )(.*)$/;
 			$text2 = $3;
-			if (length($text2) > 0)
+			if (defined($text2) and length($text2) > 0)
 			{
 				$name = $text2;
 			}
