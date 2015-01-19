@@ -198,30 +198,35 @@ sub CreateJSONFromInternet
         education => $es_inner_quote.$fields->[9].$es_inner_quote,
         study_field => $es_inner_quote.$fields->[10]."; Rok studiów: ".$fields->[11].$es_inner_quote,
         experience => $es_inner_quote.$fields->[12].$es_inner_quote,
-        languages => [
-            {
-                name => $es_inner_quote.$fields->[13].$es_inner_quote,
-                level => FormatLanguageLevel($fields->[14])
-            },
-            {
-                name => $es_inner_quote.$fields->[15].$es_inner_quote,
-                level => FormatLanguageLevel($fields->[16])
-            },
-            {
-                name => $es_inner_quote.$fields->[17].$es_inner_quote,
-                level => FormatLanguageLevel($fields->[18])
-            },
-            {
-                name => $es_inner_quote.$fields->[19].$es_inner_quote,
-                level => FormatLanguageLevel($fields->[20])
-            }
-        ],
         interests => $es_inner_quote.$fields->[21].$es_inner_quote,
         departments => \@departments,
         availability => $es_inner_quote.$fields->[23].$es_inner_quote,
         consent => FormatConsent($fields->[32])
     };
     
+	#languages
+	my $index_languages = 0;
+	for ($index_languages = 0; $index_languages < 8; $index_languages=$index_languages+2)
+    {
+        if ( length($fields->[13+$index_languages]) ) 
+        {
+			my $name;
+			my $text1 = $fields->[13+$index_languages];
+			my $text2 = "";
+			$text1 =~ /(.*)( )(.*)$/;
+			$text2 = $3;
+			if (length($text2) > 0)
+			{
+				$name = $text2;
+			}
+			else
+			{
+				$name = $fields->[13+$index_languages];
+			}
+            $perl_scalar->{languages}->{$name}->{level}= FormatLanguageLevel($fields->[13+$index_languages+1]);
+        }
+    }
+	
     my $previous_wyd = CreatePreviousWyd($fields);
     my $size_previous_wyd = keys %$previous_wyd;
     if ($size_previous_wyd)
