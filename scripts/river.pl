@@ -54,6 +54,8 @@ my $csv = Text::CSV->new ({
 });
 my $csv_file_handle;
 
+
+
 # Quotes -- windows or linux
 my $osname = $^O;
 my $es_inner_quote_win = "";
@@ -97,24 +99,29 @@ sub IndexJSON
 sub FormatLanguageLevel
 {
     my $field = shift;
-    my $level = substr(encode_utf8($field), 0 , 5);
-    if ($level =~ /Pocz/)
+    my $level = $field;
+	my $level_2 = "początkujący";
+	my $level_4 = "podstawowy";
+	my $level_6 = "średnio";
+	my $level_8 = "zaawansowany";
+	my $level_10 = "biegły";
+    if ($level =~ /$level_2/i)
     {
         return 2;
     }
-    elsif ($level =~ /Pods/)
+    elsif ($level =~ /$level_4/i)
     {
         return 4;
     }
-    elsif ($level =~ /red/)
+    elsif ($level =~ /$level_6/i)
     {
         return 6;
     }
-    elsif ($level =~ /Zaaw/)
+    elsif ($level =~ /$level_8/i)
     {
         return 8;
     }
-    elsif ($level =~ /Bieg/)
+    elsif ($level =~ /$level_10/i)
     {
         return 10;
     }
@@ -177,6 +184,30 @@ sub FormatConsent
 }
 
 #
+# InsertLanguage ($field)
+#
+sub InsertLanguage
+{
+	my $field = shift;
+	my $result = "";
+	# languages
+	my @lang = ("niemiecki", "angielski", "francuski", "hiszpański", "włoski", "łaciński", "rosyjski", "ukraiński", "szwedzki");
+	my $i = 0;
+	my $size_lang = @lang;
+	for ($i = 0; $i < $size_lang; $i++)
+    {
+		$name = @lang[$i];
+        if ($field =~ /$name/i)
+		{
+			$result = $name ;
+			last;
+		}
+    }
+	return $result;
+}
+
+
+#
 # CreateJSONFromInternet ($fields)
 #
 sub CreateJSONFromInternet
@@ -208,22 +239,11 @@ sub CreateJSONFromInternet
 	my $index_languages = 0;
 	for ($index_languages = 0; $index_languages < 8; $index_languages=$index_languages+2)
     {
-        if ( length($fields->[13+$index_languages]) ) 
+		my $name = InsertLanguage($fields->[13+$index_languages]);
+		my $level = $fields->[13+$index_languages+1];
+        if ( length($name) ) 
         {
-			my $name;
-			my $text1 = $fields->[13+$index_languages];
-			my $text2 = " ";
-			$text1 =~ /(.*)( )(.*)$/;
-			$text2 = $3;
-			if (defined($text2) and length($text2) > 0)
-			{
-				$name = $text2;
-			}
-			else
-			{
-				$name = $fields->[13+$index_languages];
-			}
-            $perl_scalar->{languages}->{$name}->{level}= FormatLanguageLevel($fields->[13+$index_languages+1]);
+            $perl_scalar->{languages}->{$name}->{level}= FormatLanguageLevel($level);
         }
     }
 	
