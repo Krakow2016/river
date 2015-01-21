@@ -43,6 +43,7 @@ use utf8;
 use Encode qw(encode_utf8);
 use Date::Parse;
 use DateTime;
+use DateTime::Format::Strptime;
 use Time::Piece;
 
 my $INTERNET_SRC =$ARGV[0];
@@ -79,6 +80,11 @@ else
 my $_index = "website";
 my $_type = "person";
 my $_id = 0;
+
+my $parser = DateTime::Format::Strptime->new(
+  pattern => '%d/%m/%Y',
+  on_error => 'croak',
+);
 
 #
 # IndexJSON ($_id, $json);
@@ -225,7 +231,6 @@ sub CreateJSONFromInternet
         address => $es_inner_quote.$fields->[5].$es_inner_quote,
         address2 => $es_inner_quote.$fields->[6].$es_inner_quote,
         parish => $es_inner_quote.$fields->[7].$es_inner_quote,
-        birth_date => DateTime->from_epoch(epoch => str2time($fields->[8]))->ymd('-'),
         education => $es_inner_quote.$fields->[9].$es_inner_quote,
         study_field => $es_inner_quote.$fields->[10]."; Rok studiów: ".$fields->[11].$es_inner_quote,
         experience => $es_inner_quote.$fields->[12].$es_inner_quote,
@@ -234,6 +239,13 @@ sub CreateJSONFromInternet
         availability => $es_inner_quote.$fields->[23].$es_inner_quote,
         consent => FormatConsent($fields->[32])
     };
+
+
+    if($fields->[8]) {
+      eval {
+        $perl_scalar->{birth_date} = $parser->parse_datetime($fields->[8])->ymd('-'),
+      }
+    }
     
 	#languages
 	my $index_languages = 0;
