@@ -197,7 +197,7 @@ sub InsertLanguage
 	my $field = shift;
 	my $result = "";
 	# languages
-	my @lang = ("niemiecki", "angielski", "francuski", "hiszpański", "włoski", "łaciński", "rosyjski", "ukraiński", "szwedzki", "portugalski");
+	my @lang = ("angielski", "białoruski", "czeski", "francuski", "grecki", "hindi", "hiszpański", "japoński", "jidysz", "koreański", "litewski", "niemiecki", "norweski", "polski", "portugalski", "rosyjski", "szwedzki", "turecki", "ukraiński", "urdu", "węgierski", "włoski", "łacina", "łotewski");
 	my $i = 0;
 	my $size_lang = @lang;
 	for ($i = 0; $i < $size_lang; $i++)
