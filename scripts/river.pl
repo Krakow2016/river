@@ -134,25 +134,6 @@ sub FormatLanguageLevel
 }
 
 #
-# CreateDepartmentsArray ($field)
-#
-sub CreateDepartmentsArray
-{
-    my $field = shift;
-    my @departments = split(/,/,$field);
-    
-    my $i = 0;
-    my $size = @departments;
-    for ($i = 0; $i < $size; $i++)
-    {
-        @departments[$i] = $es_inner_quote.@departments[$i].$es_inner_quote;
-    }
-    
-    return @departments;
-    
-}
-
-#
 # CreatePreviousWyd ($fields)
 #
 sub CreatePreviousWyd
@@ -220,7 +201,6 @@ sub CreateJSONFromInternet
 {
     my $fields = shift;
 
-    my @departments = CreateDepartmentsArray($fields->[22]);
     my $perl_scalar =
     {
         created_at => DateTime->from_epoch(epoch => str2time($fields->[0]))->datetime,
@@ -232,12 +212,13 @@ sub CreateJSONFromInternet
         address2 => $es_inner_quote.$fields->[6].$es_inner_quote,
         parish => $es_inner_quote.$fields->[7].$es_inner_quote,
         education => $es_inner_quote.$fields->[9].$es_inner_quote,
-        study_field => $es_inner_quote.$fields->[10]."; Rok studiów: ".$fields->[11].$es_inner_quote,
+        study_field => $es_inner_quote.$fields->[10].($fields->[11] ? "; Rok studiów: ".$fields->[11] : '').$es_inner_quote,
         experience => $es_inner_quote.$fields->[12].$es_inner_quote,
         interests => $es_inner_quote.$fields->[21].$es_inner_quote,
-        departments => \@departments,
+        departments => $es_inner_quote.$fields->[22].$es_inner_quote,
         availability => $es_inner_quote.$fields->[23].$es_inner_quote,
-        consent => FormatConsent($fields->[32])
+        consent => FormatConsent($fields->[32]),
+        comments => $es_inner_quote.$fields->[33].$es_inner_quote,
     };
 
 
